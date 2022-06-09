@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">AnimalCrossingHelper</string>
+
+    <!-- Стартовый экран -->
+    <string name="login_hint">Введите логин</string>
+    <string name="password_hint">Введите пароль</string>
+    <string name="password_repeat_hint">Повторите пароль</string>
+    <string name="remember_me">Запомнить меня</string>
+    <string name="registration">Регистрация</string>
+    <string name="sign_in">Войти</string>
+
+    <!-- Экран пользователя -->
+    <string name="show_password">Показать пароль</string>
+    <string name="logout">Выйти</string>
+    <string name="save">Сохранить</string>
+
+    <!-- Итем -->
+    <string name="catched">Поймал</string>
+    <string name="remind">Напомнить</string>
+
+    <!-- Экран списка -->
+    <string name="month">Месяц</string>
+    <string name="location">Локация</string>
+    <string name="price">Цена</string>
+    <string name="show_catched">Показывать пойманные</string>
+
+</resources>

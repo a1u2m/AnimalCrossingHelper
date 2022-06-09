@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="4dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/item_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:hint="@string/catched"
+            android:textColorHint="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Рыба"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/item_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="16dp"
+            app:layout_constraintEnd_toStartOf="@id/item_checkbox"
+            app:layout_constraintStart_toEndOf="@id/item_name"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@mipmap/ic_fish"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_months"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_checkbox"
+            tools:text="Ноябрь\nдекабрь"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@id/item_rarity"
+            app:layout_constraintStart_toEndOf="@id/item_months"
+            app:layout_constraintTop_toBottomOf="@id/item_checkbox"
+            tools:text="17:00-21:00"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_rarity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_time"
+            app:layout_constraintTop_toBottomOf="@id/item_checkbox"
+            tools:text="Обычная"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_months"
+            tools:text="Река"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@id/item_reminder"
+            app:layout_constraintStart_toEndOf="@id/item_location"
+            app:layout_constraintTop_toBottomOf="@id/item_months"
+            tools:text="Цена: 3500"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/item_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/remind"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_months"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
