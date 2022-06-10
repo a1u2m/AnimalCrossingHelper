@@ -46,22 +46,14 @@ class StartFragment : Fragment() {
 
         fun showPassword(view: View, isEnabled: Boolean) {
             if (isEnabled) {
-                binding.editPassword.inputType =
-                    InputType.TYPE_CLASS_TEXT //todo в екстеншн это и то что ниже?
-                binding.editPasswordRepeat.inputType = InputType.TYPE_CLASS_TEXT
+                binding.editPassword.show()
+                binding.editPasswordRepeat.show()
             } else {
-                binding.editPassword.inputType =
-                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                binding.editPasswordRepeat.inputType =
-                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.editPassword.hide()
+                binding.editPasswordRepeat.hide()
             }
-
-            binding.editPassword.text?.length?.let { binding.editPassword.setSelection(it) }
-            binding.editPasswordRepeat.text?.length?.let {
-                binding.editPasswordRepeat.setSelection(
-                    it
-                )
-            }
+            binding.editPassword.moveCursorToEnd(binding.editPassword)
+            binding.editPasswordRepeat.moveCursorToEnd(binding.editPasswordRepeat)
         }
     }
 }
