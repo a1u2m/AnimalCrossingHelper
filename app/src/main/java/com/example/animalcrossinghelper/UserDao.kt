@@ -1,9 +1,6 @@
 package com.example.animalcrossinghelper
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface UserDao {
@@ -16,5 +13,8 @@ interface UserDao {
 
     @Delete
     fun delete(user: User)
+
+    @Query("SELECT * FROM user")
+    fun getAll(): List<User>
 
 }

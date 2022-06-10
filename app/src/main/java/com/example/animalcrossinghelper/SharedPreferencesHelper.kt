@@ -34,5 +34,18 @@ class SharedPreferencesHelper(private val context: Context) {
         )
     }
 
+    fun putNextFreeId(id: Long) {
+        sharedPreferences.edit()
+            .putLong(context.getString(R.string.id_key), id + 1)
+            .apply()
+    }
+
+    fun getId(): Long {
+        return sharedPreferences.getLong(
+            context.getString(R.string.id_key),
+            0
+        )
+    }
+
 
 }

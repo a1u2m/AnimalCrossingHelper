@@ -4,6 +4,7 @@
     <!-- Ключи для SharedPreferences -->
     <string name="is_remember_me_key">is_remember_me_key</string>
     <string name="is_logged_key">is_logged_key</string>
+    <string name="id_key">id_key</string>
 
     <!-- Стартовый экран -->
     <string name="login_hint">Введите логин</string>
