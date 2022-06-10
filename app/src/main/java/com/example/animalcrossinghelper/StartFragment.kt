@@ -83,7 +83,6 @@ class StartFragment : Fragment() {
         fun signIn(view: View) {
             //todo перенести логику в вм
             //TODO: логика
-            test
             var isLogged = false //todo если логин прошел успешно, поменять на тру
             sharedPreferencesHelper.putIsLogged(isLogged)
 
