@@ -11,6 +11,8 @@ import com.example.animalcrossinghelper.databinding.FragmentUserBinding
 
 class UserFragment : Fragment() {
 
+    //todo не забыть при разлогине ставить префсы rememberMe в фолс
+
     lateinit var binding: FragmentUserBinding
 
     override fun onCreateView(

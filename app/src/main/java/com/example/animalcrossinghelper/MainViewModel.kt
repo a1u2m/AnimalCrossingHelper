@@ -7,7 +7,6 @@ import kotlin.math.log
 
 class MainViewModel : ViewModel() {
 
-    var showPassword: ObservableBoolean = ObservableBoolean()
 
 
 }
