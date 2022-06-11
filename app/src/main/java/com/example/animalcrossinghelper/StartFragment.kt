@@ -1,21 +1,17 @@
 package com.example.animalcrossinghelper
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.InputType
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.animalcrossinghelper.databinding.FragmentStartBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -53,21 +49,20 @@ class StartFragment : Fragment() {
     inner class StartFragmentHandler {
         fun register(view: View) {
             //todo перенести логику в вм
-            //TODO: логика
+            closeKeyboard(activity as AppCompatActivity)
             val login = binding.editLogin.text.toString()
             val password = binding.editPassword.text.toString()
             val passwordRepeat = binding.editPasswordRepeat.text.toString()
-            if (password != passwordRepeat) return //todo добавить снекбар "пароли не совпадают или чето такое"
+            if (checkFieldsForEmptiness(login, password, passwordRepeat)) return
+            if (checkPasswordsForEquality(password, passwordRepeat)) return
             var list: List<User> = listOf()
-            runBlocking {
-                launch {
-                    withContext(IO) {
-                        list = userDao.getAll() //todo посмотреть как заменить это на реактивщину
-                    }
-                }
-            }
+            list = getUsersList(list)
             for (i in list) {
-                if (login == i.login) return //todo добавить снекбар "пользователь с таким логином уже существует"
+                if (login == i.login) {
+                    Snackbar.make(binding.root, R.string.user_already_exists, Snackbar.LENGTH_LONG)
+                        .show()
+                    return
+                }
             }
             val newUser = User(sharedPreferencesHelper.getId(), login, password)
             sharedPreferencesHelper.putNextFreeId(sharedPreferencesHelper.getId())
@@ -82,10 +77,27 @@ class StartFragment : Fragment() {
 
         fun signIn(view: View) {
             //todo перенести логику в вм
-            //TODO: логика
-            var isLogged = false //todo если логин прошел успешно, поменять на тру
-            sharedPreferencesHelper.putIsLogged(isLogged)
-
+            closeKeyboard(activity as AppCompatActivity)
+            val login = binding.editLogin.text.toString()
+            val password = binding.editPassword.text.toString()
+            if (checkFieldsForEmptiness(login, password)) return
+            var list: List<User> = listOf()
+            list = getUsersList(list)
+            for (i in list) {
+                if (login == i.login && password == i.password) {
+                    navController.navigate(R.id.mainFragment)
+                    sharedPreferencesHelper.putIsLogged(true)
+                    return
+                } else if (login == i.login && password != i.password) {
+                    Snackbar.make(
+                        binding.root,
+                        R.string.password_is_incorrect,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    return
+                }
+            }
+            Snackbar.make(binding.root, R.string.user_is_absent, Snackbar.LENGTH_LONG).show()
         }
 
         fun rememberMe(view: View, isEnabled: Boolean) {
@@ -104,6 +116,61 @@ class StartFragment : Fragment() {
             }
             binding.editPassword.moveCursorToEnd(binding.editPassword)
             binding.editPasswordRepeat.moveCursorToEnd(binding.editPasswordRepeat)
+        }
+
+        private fun getUsersList(list: List<User>): List<User> {
+            var list1 = list
+            runBlocking {
+                launch {
+                    withContext(IO) {
+                        list1 = userDao.getAll() //todo посмотреть как заменить это на реактивщину
+                    }
+                }
+            }
+            return list1
+        }
+
+        private fun checkPasswordsForEquality(
+            password: String,
+            passwordRepeat: String
+        ): Boolean {
+            if (password != passwordRepeat) {
+                Snackbar.make(binding.root, R.string.passwords_are_not_equal, Snackbar.LENGTH_LONG)
+                    .show()
+                return true
+            }
+            return false
+        }
+
+        private fun checkFieldsForEmptiness(
+            login: String,
+            password: String,
+            passwordRepeat: String
+        ): Boolean {
+            if (login.isEmpty() || password.isEmpty() || passwordRepeat.isEmpty()) {
+                Snackbar.make(
+                    binding.root,
+                    R.string.login_and_passwords_must_not_be_empty,
+                    Snackbar.LENGTH_LONG
+                ).show()
+                return true
+            }
+            return false
+        }
+
+        private fun checkFieldsForEmptiness(
+            login: String,
+            password: String
+        ): Boolean {
+            if (login.isEmpty() || password.isEmpty()) {
+                Snackbar.make(
+                    binding.root,
+                    R.string.login_and_passwords_must_not_be_empty,
+                    Snackbar.LENGTH_LONG
+                ).show()
+                return true
+            }
+            return false
         }
     }
 }
