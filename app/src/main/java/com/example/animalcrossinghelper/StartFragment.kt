@@ -87,6 +87,7 @@ class StartFragment : Fragment() {
                 if (login == i.login && password == i.password) {
                     navController.navigate(R.id.mainFragment)
                     sharedPreferencesHelper.putIsLogged(true)
+                    sharedPreferencesHelper.putActualLogin(login)
                     return
                 } else if (login == i.login && password != i.password) {
                     Snackbar.make(

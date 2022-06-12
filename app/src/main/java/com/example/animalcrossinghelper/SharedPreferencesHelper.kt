@@ -47,5 +47,11 @@ class SharedPreferencesHelper(private val context: Context) {
         )
     }
 
+    fun putActualLogin(login: String) {
+        sharedPreferences.edit().putString(context.getString(R.string.login_key), login).apply()
+    }
 
+    fun getActualLogin(): String {
+        return sharedPreferences.getString(context.getString(R.string.login_key), "")!!
+    }
 }

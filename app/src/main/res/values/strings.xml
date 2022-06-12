@@ -5,6 +5,7 @@
     <string name="is_remember_me_key">is_remember_me_key</string>
     <string name="is_logged_key">is_logged_key</string>
     <string name="id_key">id_key</string>
+    <string name="login_key">login_key</string>
 
     <!-- Текстовки для снекбаров -->
     <string name="user_already_exists">Пользователь с таким логином уже существует</string>
