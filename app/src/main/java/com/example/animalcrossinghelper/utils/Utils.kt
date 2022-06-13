@@ -1,4 +1,4 @@
-package com.example.animalcrossinghelper
+package com.example.animalcrossinghelper.utils
 
 import android.content.Context
 import android.view.inputmethod.InputMethodManager

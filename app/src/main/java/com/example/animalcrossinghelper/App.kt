@@ -2,6 +2,7 @@ package com.example.animalcrossinghelper
 
 import android.app.Application
 import androidx.room.Room
+import com.example.animalcrossinghelper.room.AppDatabase
 
 class App: Application() {
 

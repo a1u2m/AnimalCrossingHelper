@@ -1,6 +1,6 @@
 package com.example.animalcrossinghelper.model
 
-data class Fossil(
+data class FossilModel(
     var name: FishName? = null,
     var price: String? = null,
 )

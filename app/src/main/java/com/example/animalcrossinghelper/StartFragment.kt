@@ -11,6 +11,13 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.animalcrossinghelper.databinding.FragmentStartBinding
+import com.example.animalcrossinghelper.room.AppDatabase
+import com.example.animalcrossinghelper.room.User
+import com.example.animalcrossinghelper.room.UserDao
+import com.example.animalcrossinghelper.utils.closeKeyboard
+import com.example.animalcrossinghelper.utils.hide
+import com.example.animalcrossinghelper.utils.moveCursorToEnd
+import com.example.animalcrossinghelper.utils.show
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -120,15 +127,15 @@ class StartFragment : Fragment() {
         }
 
         private fun getUsersList(list: List<User>): List<User> {
-            var list1 = list
+            var usersList = list
             runBlocking {
                 launch {
                     withContext(IO) {
-                        list1 = userDao.getAll() //todo посмотреть как заменить это на реактивщину
+                        usersList = userDao.getAll() //todo посмотреть как заменить это на реактивщину
                     }
                 }
             }
-            return list1
+            return usersList
         }
 
         private fun checkPasswordsForEquality(
