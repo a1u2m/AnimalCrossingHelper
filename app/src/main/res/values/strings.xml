@@ -6,6 +6,7 @@
     <string name="is_logged_key">is_logged_key</string>
     <string name="id_key">id_key</string>
     <string name="login_key">login_key</string>
+    <string name="logged_id_key">logged_id_key</string>
 
     <!-- Текстовки для снекбаров -->
     <string name="user_already_exists">Пользователь с таким логином уже существует</string>
@@ -13,6 +14,9 @@
     <string name="login_and_passwords_must_not_be_empty">Поля логина и паролей не должны быть пустыми</string>
     <string name="user_is_absent">Такого пользователя не существует</string>
     <string name="password_is_incorrect">Пароль введён неверно</string>
+    <string name="field_is_not_changed">Логин и пароль не изменились</string>
+    <string name="login_and_password_changed">Логин и пароль изменены</string>
+    <string name="register_complete">Пользователь зарегистрирован</string>
 
     <!-- Стартовый экран -->
     <string name="login_hint">Введите логин</string>

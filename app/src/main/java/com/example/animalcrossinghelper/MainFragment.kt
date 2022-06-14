@@ -35,6 +35,11 @@ class MainFragment : Fragment() {
     }
 
     inner class MainFragmentHandler {
+
+        fun openUserScreen(view: View) {
+            navController.navigate(R.id.userFragment)
+        }
+
         fun openFishScreen(view: View) {
 //            navController.navigate() //todo понять как на следующем экране грузить именно дб по рыбе, потом аналогично сделать по остальным категориям
         }

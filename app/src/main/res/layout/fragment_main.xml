@@ -10,73 +10,74 @@
             />
     </data>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainFragment"
-    >
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainFragment"
+        >
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Логин"
-        />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:onClick="@{handler::openUserScreen}"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Логин"
+            />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/fish"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:src="@mipmap/ic_fish"
-        app:layout_constraintBottom_toTopOf="@id/insect"
-        app:layout_constraintEnd_toStartOf="@id/sea"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login"
-        />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/fish"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:src="@mipmap/ic_fish"
+            app:layout_constraintBottom_toTopOf="@id/insect"
+            app:layout_constraintEnd_toStartOf="@id/sea"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/login"
+            />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/sea"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:src="@mipmap/ic_sea"
-        app:layout_constraintBottom_toTopOf="@id/fossil"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/fish"
-        app:layout_constraintTop_toBottomOf="@id/login"
-        />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/sea"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:src="@mipmap/ic_sea"
+            app:layout_constraintBottom_toTopOf="@id/fossil"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fish"
+            app:layout_constraintTop_toBottomOf="@id/login"
+            />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/insect"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:src="@mipmap/ic_insect"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/fossil"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fish"
-        />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/insect"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:src="@mipmap/ic_insect"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fossil"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fish"
+            />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/fossil"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:src="@mipmap/ic_fossil"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/insect"
-        app:layout_constraintTop_toBottomOf="@id/sea"
-        />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/fossil"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:src="@mipmap/ic_fossil"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/insect"
+            app:layout_constraintTop_toBottomOf="@id/sea"
+            />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

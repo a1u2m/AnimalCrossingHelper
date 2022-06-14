@@ -40,18 +40,27 @@ class SharedPreferencesHelper(private val context: Context) {
             .apply()
     }
 
-    fun getId(): Long {
+    fun getNextFreeId(): Long {
         return sharedPreferences.getLong(
             context.getString(R.string.id_key),
             0
         )
     }
 
-    fun putActualLogin(login: String) {
+    fun putActualLogin(login: String) { //todo возможно там где это используется стоит доставать логин по айдишнику (парой методов ниже)
         sharedPreferences.edit().putString(context.getString(R.string.login_key), login).apply()
     }
 
-    fun getActualLogin(): String {
+    fun getActualLogin(): String {  //todo возможно не нужно из-за тудушки выше
         return sharedPreferences.getString(context.getString(R.string.login_key), "")!!
     }
+
+    fun putIdOfLoggedUser(id: Long) {
+        sharedPreferences.edit().putLong(context.getString(R.string.logged_id_key), id).apply()
+    }
+
+    fun getIdOfLoggedUser(): Long {
+        return sharedPreferences.getLong(context.getString(R.string.logged_id_key), 0)
+    }
+
 }

@@ -259,9 +259,9 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-//    override fun onBackPressed() { //todo разкомментить когда сделаю экран логина чтоб можно было вылогиниваться пока я не сделал
-//        //do nothing
-//    }
+    override fun onBackPressed() {
+        //do nothing
+    }
 
 
 }

@@ -14,10 +14,7 @@ import com.example.animalcrossinghelper.databinding.FragmentStartBinding
 import com.example.animalcrossinghelper.room.AppDatabase
 import com.example.animalcrossinghelper.room.User
 import com.example.animalcrossinghelper.room.UserDao
-import com.example.animalcrossinghelper.utils.closeKeyboard
-import com.example.animalcrossinghelper.utils.hide
-import com.example.animalcrossinghelper.utils.moveCursorToEnd
-import com.example.animalcrossinghelper.utils.show
+import com.example.animalcrossinghelper.utils.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -60,23 +57,20 @@ class StartFragment : Fragment() {
             val login = binding.editLogin.text.toString()
             val password = binding.editPassword.text.toString()
             val passwordRepeat = binding.editPasswordRepeat.text.toString()
-            if (checkFieldsForEmptiness(login, password, passwordRepeat)) return
-            if (checkPasswordsForEquality(password, passwordRepeat)) return
-            var list: List<User> = listOf()
-            list = getUsersList(list)
-            for (i in list) {
-                if (login == i.login) {
-                    Snackbar.make(binding.root, R.string.user_already_exists, Snackbar.LENGTH_LONG)
-                        .show()
-                    return
-                }
-            }
-            val newUser = User(sharedPreferencesHelper.getId(), login, password)
-            sharedPreferencesHelper.putNextFreeId(sharedPreferencesHelper.getId())
+            if (checkFieldsForEmptiness(login, password, passwordRepeat, binding.root)) return
+            if (checkPasswordsForEquality(password, passwordRepeat, binding.root)) return
+            if (checkLoginForExisting(login, binding.root, userDao)) return
+            val newUser = User(sharedPreferencesHelper.getNextFreeId(), login, password)
+            sharedPreferencesHelper.putNextFreeId(sharedPreferencesHelper.getNextFreeId())
             runBlocking {
                 launch {
                     withContext(IO) {
                         userDao.insert(newUser) //todo посмотреть как заменить это на реактивщину
+                        Snackbar.make(
+                            binding.root,
+                            R.string.register_complete,
+                            Snackbar.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
@@ -87,14 +81,15 @@ class StartFragment : Fragment() {
             closeKeyboard(activity as AppCompatActivity)
             val login = binding.editLogin.text.toString()
             val password = binding.editPassword.text.toString()
-            if (checkFieldsForEmptiness(login, password)) return
+            if (checkFieldsForEmptiness(login, password, view)) return
             var list: List<User> = listOf()
-            list = getUsersList(list)
+            list = getUsersList(list, userDao)
             for (i in list) {
                 if (login == i.login && password == i.password) {
                     navController.navigate(R.id.mainFragment)
                     sharedPreferencesHelper.putIsLogged(true)
                     sharedPreferencesHelper.putActualLogin(login)
+                    sharedPreferencesHelper.putIdOfLoggedUser(i.id)
                     return
                 } else if (login == i.login && password != i.password) {
                     Snackbar.make(
@@ -124,61 +119,6 @@ class StartFragment : Fragment() {
             }
             binding.editPassword.moveCursorToEnd(binding.editPassword)
             binding.editPasswordRepeat.moveCursorToEnd(binding.editPasswordRepeat)
-        }
-
-        private fun getUsersList(list: List<User>): List<User> {
-            var usersList = list
-            runBlocking {
-                launch {
-                    withContext(IO) {
-                        usersList = userDao.getAll() //todo посмотреть как заменить это на реактивщину
-                    }
-                }
-            }
-            return usersList
-        }
-
-        private fun checkPasswordsForEquality(
-            password: String,
-            passwordRepeat: String
-        ): Boolean {
-            if (password != passwordRepeat) {
-                Snackbar.make(binding.root, R.string.passwords_are_not_equal, Snackbar.LENGTH_LONG)
-                    .show()
-                return true
-            }
-            return false
-        }
-
-        private fun checkFieldsForEmptiness(
-            login: String,
-            password: String,
-            passwordRepeat: String
-        ): Boolean {
-            if (login.isEmpty() || password.isEmpty() || passwordRepeat.isEmpty()) {
-                Snackbar.make(
-                    binding.root,
-                    R.string.login_and_passwords_must_not_be_empty,
-                    Snackbar.LENGTH_LONG
-                ).show()
-                return true
-            }
-            return false
-        }
-
-        private fun checkFieldsForEmptiness(
-            login: String,
-            password: String
-        ): Boolean {
-            if (login.isEmpty() || password.isEmpty()) {
-                Snackbar.make(
-                    binding.root,
-                    R.string.login_and_passwords_must_not_be_empty,
-                    Snackbar.LENGTH_LONG
-                ).show()
-                return true
-            }
-            return false
         }
     }
 }
