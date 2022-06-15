@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.animalcrossinghelper.room.AppDatabase
 
-class App: Application() {
+class App : Application() {
 
     private lateinit var database: AppDatabase
 
@@ -17,7 +17,4 @@ class App: Application() {
     fun getDatabase(): AppDatabase {
         return database
     }
-
-
-
 }

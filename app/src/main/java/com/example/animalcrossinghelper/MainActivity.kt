@@ -58,19 +58,37 @@ class MainActivity : AppCompatActivity() {
             R.id.mainFragment
         )
         retrofitHelper = RetrofitHelper()
-        downloadFish()
-//        downloadBugs() //todo когда разберусь с рыбой разкомментить и сделать так же
-//        downloadSeaCreatures() //todo когда разберусь с рыбой разкомментить и сделать так же
-//        downloadFossils() //todo когда разберусь с рыбой разкомментить и сделать так же
+        runBlocking {
+            launch {
+                withContext(Dispatchers.IO) { //todo посмотреть как заменить на реактивщину
+                    checkForIsNotEmpty()
+                }
+            }
+        }
     }
 
-    fun downloadFish() { //todo перенести логику во вьюмодель
+    private fun checkForIsNotEmpty() { //todo обработать отсутствие интернета (повторный запрос когда он появляется + снекбар с ошибкой)
+        if (fishDao.getAll().isEmpty()) {
+            downloadFish()
+        }
+        if (bugDao.getAll().isEmpty()) {
+            downloadBugs()
+        }
+        if (seaCreatureDao.getAll().isEmpty()) {
+            downloadSeaCreatures()
+        }
+        if (fossilDao.getAll().isEmpty()) {
+            downloadFossils()
+        }
+    }
+
+    private fun downloadFish() { //todo перенести логику во вьюмодель
         val fishFlowable: Flowable<List<FishModel>> = retrofitHelper.getApi().getFish()
         fishFlowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSubscriber<List<FishModel>>() {
                 override fun onNext(t: List<FishModel>?) {
                     if (t != null) {
-                        for (i in t) {
+                        for (i in t) { //todo убрать этот блок когда все будет норм работать, пока оставить для дебага
                             Log.d(TAG, "имя: ${i.name?.name_EUru}")
                             Log.d(TAG, "иконка: ${i.icon_uri}")
                             Log.d(TAG, "цена: ${i.price}")
@@ -108,7 +126,8 @@ class MainActivity : AppCompatActivity() {
                                 monthArray = months,
                                 timeArray = time,
                                 price = price,
-                                iconUri = iconUri
+                                iconUri = iconUri,
+                                userId = 0
                             )
                             runBlocking {
                                 launch {
@@ -117,7 +136,6 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-
                         }
                     }
                 }
@@ -130,43 +148,17 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onComplete() {
                     Log.d(TAG, "onComplete")
-                    bdTest()
+//                    bdTest()
                 }
             })
     }
 
-    fun bdTest() {
-        runBlocking {
-            launch {
-                withContext(Dispatchers.IO) {
-                    val list = fishDao.getAll()
-                    Log.d(TAG, "это уже из бд идёт")
-                    for (i in list) {
-                        Log.d(TAG, "имя: ${i.name}")
-                        Log.d(TAG, "иконка: ${i.iconUri}")
-                        Log.d(TAG, "цена: ${i.price}")
-                        Log.d(TAG, "локация: ${i.location}")
-                        Log.d(TAG, "редкость: ${i.rarity}")
-                        for (j in i.monthArray) {
-                            Log.d(TAG, "месяц: $j")
-                        }
-                        for (j in i.timeArray) {
-                            Log.d(TAG, "часы: $j")
-                        }
-                        Log.d(TAG, "конец того что было в бд")
-                        Log.d(TAG, "-------------------------")
-                    }
-                }
-            }
-        }
-    }
-
-    fun downloadBugs() { //todo перенести логику во вьюмодель
+    private fun downloadBugs() { //todo перенести логику во вьюмодель
         val bugModelFlowable: Flowable<List<BugModel>> = retrofitHelper.getApi().getBugs()
         bugModelFlowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSubscriber<List<BugModel>>() {
                 override fun onNext(t: List<BugModel>?) {
-                    if (t != null) {
+                    if (t != null) { //todo убрать этот блок когда все будет норм работать, пока оставить для дебага
                         for (i in t) {
                             Log.d(TAG, "имя: ${i.name?.name_EUru}")
                             Log.d(TAG, "иконка: ${i.icon_uri}")
@@ -183,6 +175,41 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     Log.d(TAG, "жуки закончились")
+                    if (t != null) {
+                        for (i in t) {
+                            val name = i.name?.name_EUru!!
+                            val location = i.availability?.location!!
+                            val rarity = i.availability?.rarity!!
+                            val price = i.price!!
+                            val iconUri = i.icon_uri!!
+                            val months = mutableListOf<String>()
+                            val time = mutableListOf<String>()
+                            for (j in i.availability!!.month_array_northern!!) {
+                                months.add(j)
+                            }
+                            for (j in i.availability!!.time_array!!) {
+                                time.add(j)
+                            }
+                            val newBug = Bug(
+                                id = 0,
+                                name = name,
+                                location = location,
+                                rarity = rarity,
+                                monthArray = months,
+                                timeArray = time,
+                                price = price,
+                                iconUri = iconUri,
+                                userId = 0
+                            )
+                            runBlocking {
+                                launch {
+                                    withContext(Dispatchers.IO) {
+                                        bugDao.insert(newBug)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 override fun onError(t: Throwable?) {
@@ -197,13 +224,13 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    fun downloadSeaCreatures() { //todo перенести логику во вьюмодель
+    private fun downloadSeaCreatures() { //todo перенести логику во вьюмодель
         val seaCreatureFlowable: Flowable<List<SeaCreatureModel>> =
             retrofitHelper.getApi().getSeaCreatures()
         seaCreatureFlowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSubscriber<List<SeaCreatureModel>>() {
                 override fun onNext(t: List<SeaCreatureModel>?) {
-                    if (t != null) {
+                    if (t != null) { //todo убрать этот блок когда все будет норм работать, пока оставить для дебага
                         for (i in t) {
                             Log.d(TAG, "имя: ${i.name?.name_EUru}")
                             Log.d(TAG, "иконка: ${i.icon_uri}")
@@ -218,6 +245,37 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     Log.d(TAG, "глубоководные закончились")
+                    if (t != null) {
+                        for (i in t) {
+                            val name = i.name?.name_EUru!!
+                            val price = i.price!!
+                            val iconUri = i.icon_uri!!
+                            val months = mutableListOf<String>()
+                            val time = mutableListOf<String>()
+                            for (j in i.availability!!.month_array_northern!!) {
+                                months.add(j)
+                            }
+                            for (j in i.availability!!.time_array!!) {
+                                time.add(j)
+                            }
+                            val newSeaCreature = SeaCreature(
+                                id = 0,
+                                name = name,
+                                monthArray = months,
+                                timeArray = time,
+                                price = price,
+                                iconUri = iconUri,
+                                userId = 0
+                            )
+                            runBlocking {
+                                launch {
+                                    withContext(Dispatchers.IO) {
+                                        seaCreatureDao.insert(newSeaCreature)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 override fun onError(t: Throwable?) {
@@ -232,12 +290,12 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    fun downloadFossils() { //todo перенести логику во вьюмодель
+    private fun downloadFossils() { //todo перенести логику во вьюмодель
         val fossilFlowable: Flowable<List<FossilModel>> = retrofitHelper.getApi().getFossils()
         fossilFlowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSubscriber<List<FossilModel>>() {
                 override fun onNext(t: List<FossilModel>?) {
-                    if (t != null) {
+                    if (t != null) { //todo убрать этот блок когда все будет норм работать, пока оставить для дебага
                         for (i in t) {
                             Log.d(TAG, "имя: ${i.name?.name_EUru}")
                             Log.d(TAG, "цена: ${i.price}")
@@ -245,6 +303,25 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     Log.d(TAG, "ископаемые закончились")
+                    if (t != null) {
+                        for (i in t) {
+                            val name = i.name?.name_EUru!!
+                            val price = i.price!!
+                            val newFossil = Fossil(
+                                id = 0,
+                                name = name,
+                                price = price,
+                                userId = 0
+                            )
+                            runBlocking {
+                                launch {
+                                    withContext(Dispatchers.IO) {
+                                        fossilDao.insert(newFossil)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 override fun onError(t: Throwable?) {
@@ -262,6 +339,4 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         //do nothing
     }
-
-
 }

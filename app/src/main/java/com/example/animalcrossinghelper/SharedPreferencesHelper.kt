@@ -30,7 +30,7 @@ class SharedPreferencesHelper(private val context: Context) {
     fun getIsLogged(): Boolean {
         return sharedPreferences.getBoolean(
             context.getString(R.string.is_logged_key),
-            true
+            false
         )
     }
 
@@ -43,7 +43,7 @@ class SharedPreferencesHelper(private val context: Context) {
     fun getNextFreeId(): Long {
         return sharedPreferences.getLong(
             context.getString(R.string.id_key),
-            0
+            1
         )
     }
 
@@ -62,5 +62,4 @@ class SharedPreferencesHelper(private val context: Context) {
     fun getIdOfLoggedUser(): Long {
         return sharedPreferences.getLong(context.getString(R.string.logged_id_key), 0)
     }
-
 }

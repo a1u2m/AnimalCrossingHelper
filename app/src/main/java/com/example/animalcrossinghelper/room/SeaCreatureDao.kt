@@ -17,4 +17,7 @@ interface SeaCreatureDao {
     @Query("SELECT * FROM seacreature")
     fun getAll(): List<SeaCreature>
 
+    @Query("SELECT * FROM fish WHERE userId = 0")
+    fun getPrimaryBase(): List<Fish>
+
 }

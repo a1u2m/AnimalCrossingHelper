@@ -108,7 +108,5 @@ class UserFragment : Fragment() {
             binding.userEditPassword.moveCursorToEnd(binding.userEditPassword)
             binding.userEditPasswordRepeat.moveCursorToEnd(binding.userEditPasswordRepeat)
         }
-
-
     }
 }

@@ -3,7 +3,7 @@ package com.example.animalcrossinghelper.room
 import androidx.room.*
 
 @Dao
-interface FishDao {
+interface FishDao { //todo если везде запросы одинаковые, может вынести в общий интерфейс который просто наследовать
 
     @Insert
     fun insert(fish: Fish)
@@ -16,5 +16,8 @@ interface FishDao {
 
     @Query("SELECT * FROM fish")
     fun getAll(): List<Fish>
+
+    @Query("SELECT * FROM fish WHERE userId = 0")
+    fun getPrimaryBase(): List<Fish>
 
 }

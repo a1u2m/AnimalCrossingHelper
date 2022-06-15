@@ -10,5 +10,6 @@ class SeaCreature(
     var monthArray: MutableList<String>,
     var timeArray: MutableList<String>,
     var price: String,
-    var icon_uri: String
+    var iconUri: String,
+    var userId: Long
 )

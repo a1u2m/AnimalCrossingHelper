@@ -17,4 +17,7 @@ interface BugDao {
     @Query("SELECT * FROM bug")
     fun getAll(): List<Bug>
 
+    @Query("SELECT * FROM fish WHERE userId = 0")
+    fun getPrimaryBase(): List<Fish>
+
 }

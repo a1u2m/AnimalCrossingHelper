@@ -1,6 +1,7 @@
 package com.example.animalcrossinghelper
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.animalcrossinghelper.databinding.FragmentStartBinding
-import com.example.animalcrossinghelper.room.AppDatabase
-import com.example.animalcrossinghelper.room.User
-import com.example.animalcrossinghelper.room.UserDao
+import com.example.animalcrossinghelper.room.*
 import com.example.animalcrossinghelper.utils.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers.IO
@@ -31,6 +30,10 @@ class StartFragment : Fragment() {
     lateinit var db: AppDatabase //todo перенести на di
     lateinit var userDao: UserDao //todo перенести на di
     lateinit var navController: NavController //todo перенести на di И НАВЕРНЯКА МОЖНО ЕГО НЕ ПЛОДИТЬ ВЕЗДЕ, В МЕЙНЕ УЖЕ ЕСТЬ
+    lateinit var fishDao: FishDao //todo перенести на di
+    lateinit var bugDao: BugDao //todo перенести на di
+    lateinit var seaCreatureDao: SeaCreatureDao //todo перенести на di
+    lateinit var fossilDao: FossilDao //todo перенести на di
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +47,10 @@ class StartFragment : Fragment() {
         sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
         db = (requireActivity().application as App).getDatabase()
         userDao = db.userDao()
+        fishDao = db.fishDao()
+        bugDao = db.bugDao()
+        seaCreatureDao = db.seaCreatureDao()
+        fossilDao = db.fossilDao()
         val navHostFragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -65,6 +72,87 @@ class StartFragment : Fragment() {
             runBlocking {
                 launch {
                     withContext(IO) {
+                        val fishList = fishDao.getPrimaryBase()
+                        for (i in fishList) {
+                            val monthList: MutableList<String> = mutableListOf()
+                            val timeList: MutableList<String> = mutableListOf()
+                            for (j in i.monthArray) {
+                                monthList.add(j)
+                            }
+                            for (j in i.timeArray) {
+                                timeList.add(j)
+                            }
+                            val newFish = Fish(
+                                name = i.name,
+                                location = i.location,
+                                rarity = i.rarity,
+                                monthArray = monthList,
+                                timeArray = timeList,
+                                price = i.price,
+                                iconUri = i.iconUri,
+                                userId = newUser.id
+                            )
+                            fishDao.insert(newFish)
+                        }
+                        val bugList = bugDao.getPrimaryBase()
+                        for (i in bugList) {
+                            val monthList: MutableList<String> = mutableListOf()
+                            val timeList: MutableList<String> = mutableListOf()
+                            for (j in i.monthArray) {
+                                monthList.add(j)
+                            }
+                            for (j in i.timeArray) {
+                                timeList.add(j)
+                            }
+                            val newBug = Bug(
+                                name = i.name,
+                                location = i.location,
+                                rarity = i.rarity,
+                                monthArray = monthList,
+                                timeArray = timeList,
+                                price = i.price,
+                                iconUri = i.iconUri,
+                                userId = newUser.id
+                            )
+                            bugDao.insert(newBug)
+                        }
+                        val seaCreatureList = seaCreatureDao.getPrimaryBase()
+                        for (i in seaCreatureList) {
+                            val monthList: MutableList<String> = mutableListOf()
+                            val timeList: MutableList<String> = mutableListOf()
+                            for (j in i.monthArray) {
+                                monthList.add(j)
+                            }
+                            for (j in i.timeArray) {
+                                timeList.add(j)
+                            }
+                            val newSeaCreature = SeaCreature(
+                                name = i.name,
+                                monthArray = monthList,
+                                timeArray = timeList,
+                                price = i.price,
+                                iconUri = i.iconUri,
+                                userId = newUser.id
+                            )
+                            seaCreatureDao.insert(newSeaCreature)
+                        }
+                        val fossilList = fossilDao.getPrimaryBase()
+                        for (i in fossilList) {
+                            val monthList: MutableList<String> = mutableListOf()
+                            val timeList: MutableList<String> = mutableListOf()
+                            for (j in i.monthArray) {
+                                monthList.add(j)
+                            }
+                            for (j in i.timeArray) {
+                                timeList.add(j)
+                            }
+                            val newFossil = Fossil(
+                                name = i.name,
+                                price = i.price,
+                                userId = newUser.id
+                            )
+                            fossilDao.insert(newFossil)
+                        }
                         userDao.insert(newUser) //todo посмотреть как заменить это на реактивщину
                         Snackbar.make(
                             binding.root,

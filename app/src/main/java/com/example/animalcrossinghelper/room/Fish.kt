@@ -13,5 +13,6 @@ class Fish(
     var monthArray: MutableList<String>,
     var timeArray: MutableList<String>,
     var price: String,
-    var iconUri: String
+    var iconUri: String,
+    var userId: Long
 )

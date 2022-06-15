@@ -17,4 +17,7 @@ interface FossilDao {
     @Query("SELECT * FROM fossil")
     fun getAll(): List<Fossil>
 
+    @Query("SELECT * FROM fish WHERE userId = 0")
+    fun getPrimaryBase(): List<Fish>
+
 }
