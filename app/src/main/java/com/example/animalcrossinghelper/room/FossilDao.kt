@@ -17,7 +17,9 @@ interface FossilDao {
     @Query("SELECT * FROM fossil")
     fun getAll(): List<Fossil>
 
-    @Query("SELECT * FROM fish WHERE userId = 0")
+    @Query("SELECT * FROM fossil WHERE userId = 0")
     fun getPrimaryBase(): List<Fossil>
 
+    @Query("DELETE FROM fossil WHERE id = :id")
+    fun deleteById(id: Long)
 }
