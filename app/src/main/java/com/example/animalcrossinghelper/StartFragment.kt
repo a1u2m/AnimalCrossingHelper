@@ -138,14 +138,6 @@ class StartFragment : Fragment() {
                         }
                         val fossilList = fossilDao.getPrimaryBase()
                         for (i in fossilList) {
-                            val monthList: MutableList<String> = mutableListOf()
-                            val timeList: MutableList<String> = mutableListOf()
-                            for (j in i.monthArray) {
-                                monthList.add(j)
-                            }
-                            for (j in i.timeArray) {
-                                timeList.add(j)
-                            }
                             val newFossil = Fossil(
                                 name = i.name,
                                 price = i.price,
