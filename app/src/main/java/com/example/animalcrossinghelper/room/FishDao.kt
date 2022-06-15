@@ -3,7 +3,7 @@ package com.example.animalcrossinghelper.room
 import androidx.room.*
 
 @Dao
-interface FishDao { //todo если везде запросы одинаковые, может вынести в общий интерфейс который просто наследовать
+interface FishDao {
 
     @Insert
     fun insert(fish: Fish)
