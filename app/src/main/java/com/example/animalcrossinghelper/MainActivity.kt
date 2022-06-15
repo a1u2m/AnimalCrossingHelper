@@ -88,23 +88,6 @@ class MainActivity : AppCompatActivity() {
             .subscribe(object : DisposableSubscriber<List<FishModel>>() {
                 override fun onNext(t: List<FishModel>?) {
                     if (t != null) {
-                        for (i in t) { //todo убрать этот блок когда все будет норм работать, пока оставить для дебага
-                            Log.d(TAG, "имя: ${i.name?.name_EUru}")
-                            Log.d(TAG, "иконка: ${i.icon_uri}")
-                            Log.d(TAG, "цена: ${i.price}")
-                            Log.d(TAG, "локация: ${i.availability?.location}")
-                            Log.d(TAG, "редкость: ${i.availability?.rarity}")
-                            for (j in i.availability?.month_array_northern!!) {
-                                Log.d(TAG, "месяц: $j")
-                            }
-                            for (j in i.availability?.time_array!!) {
-                                Log.d(TAG, "часы: $j")
-                            }
-                            Log.d(TAG, "-------------------------")
-                        }
-                    }
-                    Log.d(TAG, "рыба закончилась")
-                    if (t != null) {
                         for (i in t) {
                             val name = i.name?.name_EUru!!
                             val location = i.availability?.location!!
@@ -158,23 +141,6 @@ class MainActivity : AppCompatActivity() {
         bugModelFlowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSubscriber<List<BugModel>>() {
                 override fun onNext(t: List<BugModel>?) {
-                    if (t != null) { //todo убрать этот блок когда все будет норм работать, пока оставить для дебага
-                        for (i in t) {
-                            Log.d(TAG, "имя: ${i.name?.name_EUru}")
-                            Log.d(TAG, "иконка: ${i.icon_uri}")
-                            Log.d(TAG, "цена: ${i.price}")
-                            Log.d(TAG, "локация: ${i.availability?.location}")
-                            Log.d(TAG, "редкость: ${i.availability?.rarity}")
-                            for (j in i.availability?.month_array_northern!!) {
-                                Log.d(TAG, "месяц: $j")
-                            }
-                            for (j in i.availability?.time_array!!) {
-                                Log.d(TAG, "часы: $j")
-                            }
-                            Log.d(TAG, "-------------------------")
-                        }
-                    }
-                    Log.d(TAG, "жуки закончились")
                     if (t != null) {
                         for (i in t) {
                             val name = i.name?.name_EUru!!
@@ -230,21 +196,6 @@ class MainActivity : AppCompatActivity() {
         seaCreatureFlowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSubscriber<List<SeaCreatureModel>>() {
                 override fun onNext(t: List<SeaCreatureModel>?) {
-                    if (t != null) { //todo убрать этот блок когда все будет норм работать, пока оставить для дебага
-                        for (i in t) {
-                            Log.d(TAG, "имя: ${i.name?.name_EUru}")
-                            Log.d(TAG, "иконка: ${i.icon_uri}")
-                            Log.d(TAG, "цена: ${i.price}")
-                            for (j in i.availability?.month_array_northern!!) {
-                                Log.d(TAG, "месяц: $j")
-                            }
-                            for (j in i.availability?.time_array!!) {
-                                Log.d(TAG, "часы: $j")
-                            }
-                            Log.d(TAG, "-------------------------")
-                        }
-                    }
-                    Log.d(TAG, "глубоководные закончились")
                     if (t != null) {
                         for (i in t) {
                             val name = i.name?.name_EUru!!
@@ -295,14 +246,6 @@ class MainActivity : AppCompatActivity() {
         fossilFlowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSubscriber<List<FossilModel>>() {
                 override fun onNext(t: List<FossilModel>?) {
-                    if (t != null) { //todo убрать этот блок когда все будет норм работать, пока оставить для дебага
-                        for (i in t) {
-                            Log.d(TAG, "имя: ${i.name?.name_EUru}")
-                            Log.d(TAG, "цена: ${i.price}")
-                            Log.d(TAG, "-------------------------")
-                        }
-                    }
-                    Log.d(TAG, "ископаемые закончились")
                     if (t != null) {
                         for (i in t) {
                             val name = i.name?.name_EUru!!

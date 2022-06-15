@@ -21,7 +21,7 @@ fun closeKeyboard(activity: AppCompatActivity) {
     }
 }
 
-fun checkPasswordsForEquality( //todo эти 3 метода отсюда и из StartFragment надо бы перенести в утилсы
+fun checkPasswordsForEquality(
     password: String,
     passwordRepeat: String,
     view: View
