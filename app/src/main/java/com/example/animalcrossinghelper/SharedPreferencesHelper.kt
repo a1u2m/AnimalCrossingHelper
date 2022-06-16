@@ -2,8 +2,9 @@ package com.example.animalcrossinghelper
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import javax.inject.Inject
 
-class SharedPreferencesHelper(private val context: Context) {
+class SharedPreferencesHelper @Inject constructor(private val context: Context) {
 
     private val sharedPreferences =
         context.getSharedPreferences("SharedPreferencesHelper", MODE_PRIVATE)

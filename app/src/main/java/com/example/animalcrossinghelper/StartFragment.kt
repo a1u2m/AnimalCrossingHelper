@@ -19,21 +19,24 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import toothpick.ktp.KTP
+import toothpick.ktp.delegate.inject
 
 class StartFragment : Fragment() {
 
     val TAG = "StartFragment"
 
-    lateinit var model: MainViewModel //todo перенести на di
     lateinit var binding: FragmentStartBinding
-    lateinit var sharedPreferencesHelper: SharedPreferencesHelper //todo перенести на di
-    lateinit var db: AppDatabase //todo перенести на di
-    lateinit var userDao: UserDao //todo перенести на di
-    lateinit var navController: NavController //todo перенести на di И НАВЕРНЯКА МОЖНО ЕГО НЕ ПЛОДИТЬ ВЕЗДЕ, В МЕЙНЕ УЖЕ ЕСТЬ
-    lateinit var fishDao: FishDao //todo перенести на di
-    lateinit var bugDao: BugDao //todo перенести на di
-    lateinit var seaCreatureDao: SeaCreatureDao //todo перенести на di
-    lateinit var fossilDao: FossilDao //todo перенести на di
+    private val prefs: SharedPreferencesHelper by inject()
+    private val userDao: UserDao by inject()
+    private val fishDao: FishDao by inject()
+    private val bugDao: BugDao by inject()
+    private val seaCreatureDao: SeaCreatureDao by inject()
+    private val fossilDao: FossilDao by inject()
+
+    init {
+        KTP.openRootScope().inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,17 +46,6 @@ class StartFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_start, container, false)
         val handler = StartFragmentHandler()
         binding.handler = handler
-        model = ViewModelProviders.of(requireActivity())[MainViewModel::class.java]
-        sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
-        db = (requireActivity().application as App).getDatabase()
-        userDao = db.userDao()
-        fishDao = db.fishDao()
-        bugDao = db.bugDao()
-        seaCreatureDao = db.seaCreatureDao()
-        fossilDao = db.fossilDao()
-        val navHostFragment =
-            requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
         return binding.root
     }
 
@@ -67,8 +59,8 @@ class StartFragment : Fragment() {
             if (checkFieldsForEmptiness(login, password, passwordRepeat, binding.root)) return
             if (checkPasswordsForEquality(password, passwordRepeat, binding.root)) return
             if (checkLoginForExisting(login, binding.root, userDao)) return
-            val newUser = User(sharedPreferencesHelper.getNextFreeId(), login, password)
-            sharedPreferencesHelper.putNextFreeId(sharedPreferencesHelper.getNextFreeId())
+            val newUser = User(prefs.getNextFreeId(), login, password)
+            prefs.putNextFreeId(prefs.getNextFreeId())
             runBlocking {
                 launch {
                     withContext(IO) {
@@ -166,10 +158,10 @@ class StartFragment : Fragment() {
             list = getUsersList(list, userDao)
             for (i in list) {
                 if (login == i.login && password == i.password) {
-                    navController.navigate(R.id.mainFragment)
-                    sharedPreferencesHelper.putIsLogged(true)
-                    sharedPreferencesHelper.putActualLogin(login)
-                    sharedPreferencesHelper.putIdOfLoggedUser(i.id)
+                    navigate(R.id.mainFragment)
+                    prefs.putIsLogged(true)
+                    prefs.putActualLogin(login)
+                    prefs.putIdOfLoggedUser(i.id)
                     return
                 } else if (login == i.login && password != i.password) {
                     Snackbar.make(
@@ -185,7 +177,7 @@ class StartFragment : Fragment() {
 
         fun rememberMe(view: View, isEnabled: Boolean) {
             //todo перенести логику в вм
-            sharedPreferencesHelper.putRememberMe(isEnabled)
+            prefs.putRememberMe(isEnabled)
         }
 
         fun showPassword(view: View, isEnabled: Boolean) {

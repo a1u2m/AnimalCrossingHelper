@@ -22,42 +22,37 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import toothpick.ktp.KTP
+import toothpick.ktp.delegate.inject
 
 class MainActivity : AppCompatActivity() {
 
     val TAG = "MainActivity"
 
-    lateinit var db: AppDatabase //todo перенести на di
-    lateinit var userDao: UserDao //todo перенести на di
-    lateinit var fishDao: FishDao //todo перенести на di
-    lateinit var bugDao: BugDao //todo перенести на di
-    lateinit var seaCreatureDao: SeaCreatureDao //todo перенести на di
-    lateinit var fossilDao: FossilDao //todo перенести на di
     lateinit var binding: ActivityMainBinding
-    lateinit var model: MainViewModel //todo перенести на di
-    lateinit var sharedPreferencesHelper: SharedPreferencesHelper //todo перенести на di
-    lateinit var navController: NavController //todo перенести на di
-    lateinit var retrofitHelper: RetrofitHelper //todo перенести на di
+    lateinit var navController: NavController
+    private val fishDao: FishDao by inject()
+    private val bugDao: BugDao by inject()
+    private val seaCreatureDao: SeaCreatureDao by inject()
+    private val fossilDao: FossilDao by inject()
+    private val prefs: SharedPreferencesHelper by inject()
+    private val retrofitHelper: RetrofitHelper by inject()
+
+    init {
+        KTP.openRootScope().inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        KTP.openRootScope().inject(this)
         binding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
-        model = ViewModelProviders.of(this)[MainViewModel::class.java]
-        sharedPreferencesHelper = SharedPreferencesHelper(this)
-        db = (application as App).getDatabase()
-        userDao = db.userDao()
-        fishDao = db.fishDao()
-        bugDao = db.bugDao()
-        seaCreatureDao = db.seaCreatureDao()
-        fossilDao = db.fossilDao()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        if (sharedPreferencesHelper.getRememberMe() && sharedPreferencesHelper.getIsLogged()) navController.navigate(
+        if (prefs.getRememberMe() && prefs.getIsLogged()) navController.navigate(
             R.id.mainFragment
         )
-        retrofitHelper = RetrofitHelper()
         runBlocking {
             launch {
                 withContext(Dispatchers.IO) { //todo посмотреть как заменить на реактивщину

@@ -9,14 +9,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.animalcrossinghelper.databinding.FragmentMainBinding
+import com.example.animalcrossinghelper.utils.navigate
+import toothpick.ktp.KTP
+import toothpick.ktp.delegate.inject
 
 class MainFragment : Fragment() {
 
     val TAG = "MainFragment"
 
     lateinit var binding: FragmentMainBinding
-    lateinit var sharedPreferencesHelper: SharedPreferencesHelper //todo перенести на di
-    lateinit var navController: NavController //todo перенести на di И НАВЕРНЯКА МОЖНО ЕГО НЕ ПЛОДИТЬ ВЕЗДЕ, В МЕЙНЕ УЖЕ ЕСТЬ
+    private val prefs: SharedPreferencesHelper by inject()
+
+    init {
+        KTP.openRootScope().inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,18 +32,14 @@ class MainFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         val handler = MainFragmentHandler()
         binding.handler = handler
-        sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
-        binding.login.text = sharedPreferencesHelper.getActualLogin()
-        val navHostFragment =
-            requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
+        binding.login.text = prefs.getActualLogin()
         return binding.root
     }
 
     inner class MainFragmentHandler {
 
         fun openUserScreen(view: View) {
-            navController.navigate(R.id.userFragment)
+            navigate(R.id.userFragment)
         }
 
         fun openFishScreen(view: View) {

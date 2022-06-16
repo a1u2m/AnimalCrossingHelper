@@ -20,14 +20,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import toothpick.ktp.KTP
+import toothpick.ktp.delegate.inject
 
 class UserFragment : Fragment() {
 
-    lateinit var sharedPreferencesHelper: SharedPreferencesHelper //todo перенести на di
+    val TAG = "UserFragment"
+
     lateinit var binding: FragmentUserBinding
-    lateinit var navController: NavController //todo перенести на di И НАВЕРНЯКА МОЖНО ЕГО НЕ ПЛОДИТЬ ВЕЗДЕ, В МЕЙНЕ УЖЕ ЕСТЬ
-    lateinit var db: AppDatabase //todo перенести на di
-    lateinit var userDao: UserDao //todo перенести на di
+    private val prefs: SharedPreferencesHelper by inject()
+    private val userDao: UserDao by inject()
+
+    init {
+        KTP.openRootScope().inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,13 +43,7 @@ class UserFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_user, container, false)
         val handler = UserFragmentHandler()
         binding.handler = handler
-        sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
-        val navHostFragment =
-            requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-        db = (requireActivity().application as App).getDatabase()
-        userDao = db.userDao()
-        binding.userEditLogin.setText(sharedPreferencesHelper.getActualLogin())
+        binding.userEditLogin.setText(prefs.getActualLogin())
         binding.userEditPassword.setText(getPassword())
         binding.userEditPasswordRepeat.setText(getPassword())
         return binding.root
@@ -55,7 +55,7 @@ class UserFragment : Fragment() {
             launch {
                 withContext(Dispatchers.IO) {
                     password =
-                        userDao.getById(sharedPreferencesHelper.getIdOfLoggedUser()).password //todo посмотреть как заменить это на реактивщину
+                        userDao.getById(prefs.getIdOfLoggedUser()).password //todo посмотреть как заменить это на реактивщину
                 }
             }
         }
@@ -72,12 +72,12 @@ class UserFragment : Fragment() {
             if (checkPasswordsForEquality(password, passwordRepeat, binding.root)) return
             if (checkLoginForExisting(
                     login,
-                    sharedPreferencesHelper.getIdOfLoggedUser(),
+                    prefs.getIdOfLoggedUser(),
                     binding.root, userDao
                 )
             ) return
             if (checkFieldsForChange(login, password, binding.root, userDao)) return
-            val updatedUser = User(sharedPreferencesHelper.getIdOfLoggedUser(), login, password)
+            val updatedUser = User(prefs.getIdOfLoggedUser(), login, password)
             runBlocking {
                 launch {
                     withContext(Dispatchers.IO) {
@@ -87,13 +87,13 @@ class UserFragment : Fragment() {
             }
             Snackbar.make(binding.root, R.string.login_and_password_changed, Snackbar.LENGTH_LONG)
                 .show()
-            navController.navigate(R.id.mainFragment)
+            navigate(R.id.mainFragment)
         }
 
         fun logout(view: View) {
             closeKeyboard(activity as AppCompatActivity)
-            sharedPreferencesHelper.putRememberMe(false)
-            navController.navigate(R.id.startFragment)
+            prefs.putRememberMe(false)
+            navigate(R.id.startFragment)
         }
 
         fun showPassword(view: View, isEnabled: Boolean) {

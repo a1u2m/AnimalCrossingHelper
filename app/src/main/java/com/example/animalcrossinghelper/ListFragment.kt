@@ -8,10 +8,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.example.animalcrossinghelper.databinding.FragmentListBinding
 import com.example.animalcrossinghelper.databinding.FragmentStartBinding
+import toothpick.ktp.KTP
 
 class ListFragment : Fragment() {
 
+    val TAG = "ListFragment"
+
     lateinit var binding: FragmentListBinding
+
+    init {
+        KTP.openRootScope().inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
