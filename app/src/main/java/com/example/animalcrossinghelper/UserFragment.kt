@@ -7,11 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import com.example.animalcrossinghelper.databinding.FragmentStartBinding
 import com.example.animalcrossinghelper.databinding.FragmentUserBinding
-import com.example.animalcrossinghelper.room.AppDatabase
 import com.example.animalcrossinghelper.room.User
 import com.example.animalcrossinghelper.room.UserDao
 import com.example.animalcrossinghelper.utils.*
@@ -87,7 +83,7 @@ class UserFragment : Fragment() {
             }
             Snackbar.make(binding.root, R.string.login_and_password_changed, Snackbar.LENGTH_LONG)
                 .show()
-            navigate(R.id.mainFragment)
+            navigate(R.id.hubFragment)
         }
 
         fun logout(view: View) {

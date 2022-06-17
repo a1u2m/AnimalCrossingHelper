@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_start" >
         <action
             android:id="@+id/action_startFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/hubFragment" />
     </fragment>
     <fragment
         android:id="@+id/userFragment"
@@ -24,10 +24,10 @@
             app:destination="@id/startFragment" />
     </fragment>
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.animalcrossinghelper.MainFragment"
+        android:id="@+id/hubFragment"
+        android:name="com.example.animalcrossinghelper.HubFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_hub" >
         <action
             android:id="@+id/action_mainFragment_to_userFragment"
             app:destination="@id/userFragment" />

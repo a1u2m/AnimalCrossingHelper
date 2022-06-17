@@ -6,7 +6,7 @@
 
         <variable
             name="handler"
-            type="com.example.animalcrossinghelper.MainFragment.MainFragmentHandler"
+            type="com.example.animalcrossinghelper.HubFragment.HubFragmentHandler"
             />
     </data>
 
@@ -15,7 +15,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainFragment"
+        tools:context=".HubFragment"
         >
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -35,6 +35,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="16dp"
+            android:onClick="@{handler::openFishScreen}"
             android:src="@mipmap/ic_fish"
             app:layout_constraintBottom_toTopOf="@id/insect"
             app:layout_constraintEnd_toStartOf="@id/sea"
@@ -47,6 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="16dp"
+            android:onClick="@{handler::openSeaCreatureScreen}"
             android:src="@mipmap/ic_sea"
             app:layout_constraintBottom_toTopOf="@id/fossil"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="16dp"
+            android:onClick="@{handler::openBugScreen}"
             android:src="@mipmap/ic_insect"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/fossil"
@@ -71,6 +74,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="16dp"
+            android:onClick="@{handler::openFossilScreen}"
             android:src="@mipmap/ic_fossil"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

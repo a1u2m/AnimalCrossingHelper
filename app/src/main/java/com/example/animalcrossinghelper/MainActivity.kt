@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.animalcrossinghelper.api.RetrofitHelper
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         if (prefs.getRememberMe() && prefs.getIsLogged()) navController.navigate(
-            R.id.mainFragment
+            R.id.hubFragment
         )
         runBlocking {
             launch {
