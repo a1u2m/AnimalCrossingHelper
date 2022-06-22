@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.animalcrossinghelper.databinding.FragmentListBinding
-import com.example.animalcrossinghelper.room.Fish
-import com.example.animalcrossinghelper.room.FishDao
+import com.example.animalcrossinghelper.room.*
 import com.example.animalcrossinghelper.utils.gone
 import com.example.animalcrossinghelper.utils.navigate
 import kotlinx.coroutines.Dispatchers
@@ -25,8 +24,11 @@ class ListFragment : Fragment() {
 
     lateinit var binding: FragmentListBinding
     private val model: MainViewModel by inject()
-    private val itemList = mutableListOf<Fish>()
+    private val itemList = mutableListOf<Any>()
     private val fishDao: FishDao by inject()
+    private val bugDao: BugDao by inject()
+    private val fossilhDao: FossilDao by inject()
+    private val seaCreatureDao: SeaCreatureDao by inject()
     private val prefs: SharedPreferencesHelper by inject()
 
     init {
@@ -49,7 +51,7 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var db: List<Fish>
+        var db: List<Any>
         when (model.category) {
             MainViewModel.Category.Fish -> {
                 runBlocking {
@@ -62,19 +64,40 @@ class ListFragment : Fragment() {
                 }
             }
             MainViewModel.Category.Bug -> {
-                //todo загрузить жуков
+                runBlocking {
+                    launch {
+                        withContext(Dispatchers.IO) { //todo посмотреть как заменить на реактивщину
+                            db = bugDao.getUserBase(prefs.getIdOfLoggedUser())
+                            fillItemList(db)
+                        }
+                    }
+                }
             }
             MainViewModel.Category.SeaCreature -> {
                 binding.locationTv.gone()
                 binding.locationSpinner.gone()
-                //todo загрузить глубоководных
+                runBlocking {
+                    launch {
+                        withContext(Dispatchers.IO) { //todo посмотреть как заменить на реактивщину
+                            db = seaCreatureDao.getUserBase(prefs.getIdOfLoggedUser())
+                            fillItemList(db)
+                        }
+                    }
+                }
             }
             MainViewModel.Category.Fossil -> {
                 binding.locationTv.gone()
                 binding.locationSpinner.gone()
                 binding.monthSpinner.gone()
                 binding.monthTv.gone()
-                //todo загрузить ископаемые
+                runBlocking {
+                    launch {
+                        withContext(Dispatchers.IO) { //todo посмотреть как заменить на реактивщину
+                            db = fossilhDao.getUserBase(prefs.getIdOfLoggedUser())
+                            fillItemList(db)
+                        }
+                    }
+                }
             }
         }
 
@@ -85,9 +108,29 @@ class ListFragment : Fragment() {
     }
 
     private fun fillItemList(items: List<Any>) {
-        for (i in items.indices) {
-            itemList.add(items[i] as Fish)
+        when (model.category) {
+            MainViewModel.Category.Fish -> {
+                for (i in items.indices) {
+                    itemList.add(items[i] as Fish)
+                }
+            }
+            MainViewModel.Category.Bug -> {
+                for (i in items.indices) {
+                    itemList.add(items[i] as Bug)
+                }
+            }
+            MainViewModel.Category.SeaCreature -> {
+                for (i in items.indices) {
+                    itemList.add(items[i] as SeaCreature)
+                }
+            }
+            MainViewModel.Category.Fossil -> {
+                for (i in items.indices) {
+                    itemList.add(items[i] as Fossil)
+                }
+            }
         }
+
     }
 
     inner class ListFragmentHandler {

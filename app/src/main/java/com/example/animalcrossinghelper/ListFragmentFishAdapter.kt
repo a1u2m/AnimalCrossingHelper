@@ -9,8 +9,8 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.animalcrossinghelper.room.Fish
-import com.example.animalcrossinghelper.room.FishDao
+import com.example.animalcrossinghelper.room.*
+import com.example.animalcrossinghelper.utils.gone
 import com.example.animalcrossinghelper.utils.load
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Observable
@@ -23,7 +23,7 @@ import toothpick.ktp.KTP
 import toothpick.ktp.delegate.inject
 import java.util.concurrent.TimeUnit
 
-class ListFragmentFishAdapter(private val context: Context, private val list: MutableList<Fish>) :
+class ListFragmentFishAdapter(private val context: Context, private val list: MutableList<Any>) :
         RecyclerView.Adapter<ListFragmentFishAdapter.ViewHolder>() { //todo может если вместо Fish подставить Any то норм будет, протестить когда с рыбой на 100% разберусь
 
     private val TAG = "ViewPagerAdapter"
@@ -33,11 +33,29 @@ class ListFragmentFishAdapter(private val context: Context, private val list: Mu
     private val fishDao: FishDao by inject()
     private val prefs: SharedPreferencesHelper by inject()
     private val model: MainViewModel by inject()
+    private var fishList = mutableListOf<Fish>()
+    private var fossilList = mutableListOf<Fossil>()
+    private var bugList = mutableListOf<Bug>()
+    private var seaCreaturesList = mutableListOf<SeaCreature>()
 
     private val inflater = LayoutInflater.from(context)
 
     init {
         KTP.openRootScope().inject(this)
+        when (model.category) {
+            MainViewModel.Category.Fish -> {
+                fishList = list as MutableList<Fish>
+            }
+            MainViewModel.Category.Bug -> {
+                bugList = list as MutableList<Bug>
+            }
+            MainViewModel.Category.Fossil -> {
+                fossilList = list as MutableList<Fossil>
+            }
+            MainViewModel.Category.SeaCreature -> {
+                seaCreaturesList = list as MutableList<SeaCreature>
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,45 +64,161 @@ class ListFragmentFishAdapter(private val context: Context, private val list: Mu
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val itemsList = list[position]
-        val pictureLink = itemsList.iconUri
-        with(holder) {
-            val monthList = itemsList.monthArray
-            for (i in monthList) {
-                if (isAllYear(monthList)) months.text = "Круглый год"
-                else months.text = prepareMonths(monthList)
+        when (model.category) {
+            MainViewModel.Category.Fish -> {
+                val itemsList = fishList[position]
+                val pictureLink = itemsList.iconUri
+                with(holder) {
+                    val monthList = itemsList.monthArray
+                    for (i in monthList) {
+                        if (isAllYear(monthList)) months.text = "Круглый год"
+                        else months.text = prepareMonths(monthList)
+                    }
+                    val timeList = itemsList.timeArray
+                    for (i in timeList) {
+                        if (isAllDay(timeList)) time.text = "В любое время"
+                        else time.text = prepareTime(timeList)
+                    }
+                    name.text =
+                            "Название: ${
+                                itemsList.name.replaceFirstChar {
+                                    it.uppercase()
+                                }
+                            }" //todo текст в стрингу и от ворнинга избавиться
+                    rarity.text =
+                            "Попадается: ${convertRarity(itemsList.rarity)}" //todo текст в стрингу и от ворнинга избавиться
+                    location.text =
+                            "Локация: ${convertLocation(itemsList.location)}" //todo текст в стрингу и от ворнинга избавиться
+                    price.text = "Цена: ${itemsList.price}" //todo текст в стрингу и от ворнинга избавиться
+                    reminder.setOnClickListener {
+                        //todo тут чето с воркменежером подмутить
+                    }
+                    check.setOnClickListener {
+                        createNewDisposableAndSubscribe(itemsList.id, position)
+                        Snackbar.make(
+                                itemView,
+                                R.string.entry_deleted,
+                                5000
+                        ).setAction(
+                                "Отмена"
+                        ) { timeCountDisposable.dispose() }.show()
+                    }
+                }
+                load(pictureLink, holder.icon)
             }
-            val timeList = itemsList.timeArray
-            for (i in timeList) {
-                if (isAllDay(timeList)) time.text = "В любое время"
-                else time.text = prepareTime(timeList)
+            MainViewModel.Category.Bug -> {
+                val itemsList = bugList[position]
+                val pictureLink = itemsList.iconUri
+                with(holder) {
+                    val monthList = itemsList.monthArray
+                    for (i in monthList) {
+                        if (isAllYear(monthList)) months.text = "Круглый год"
+                        else months.text = prepareMonths(monthList)
+                    }
+                    val timeList = itemsList.timeArray
+                    for (i in timeList) {
+                        if (isAllDay(timeList)) time.text = "В любое время"
+                        else time.text = prepareTime(timeList)
+                    }
+                    name.text =
+                            "Название: ${
+                                itemsList.name.replaceFirstChar {
+                                    it.uppercase()
+                                }
+                            }" //todo текст в стрингу и от ворнинга избавиться
+                    rarity.text =
+                            "Попадается: ${convertRarity(itemsList.rarity)}" //todo текст в стрингу и от ворнинга избавиться
+                    location.text =
+                            "Локация: ${convertLocation(itemsList.location)}" //todo текст в стрингу и от ворнинга избавиться
+                    price.text = "Цена: ${itemsList.price}" //todo текст в стрингу и от ворнинга избавиться
+                    reminder.setOnClickListener {
+                        //todo тут чето с воркменежером подмутить
+                    }
+                    check.setOnClickListener {
+                        createNewDisposableAndSubscribe(itemsList.id, position)
+                        Snackbar.make(
+                                itemView,
+                                R.string.entry_deleted,
+                                5000
+                        ).setAction(
+                                "Отмена"
+                        ) { timeCountDisposable.dispose() }.show()
+                    }
+                }
+                load(pictureLink, holder.icon)
             }
-            name.text =
-                    "Название: ${
-                        itemsList.name.replaceFirstChar {
-                            it.uppercase()
-                        }
-                    }" //todo текст в стрингу и от ворнинга избавиться
-            rarity.text =
-                    "Попадается: ${convertRarity(itemsList.rarity)}" //todo текст в стрингу и от ворнинга избавиться
-            location.text =
-                    "Локация: ${convertLocation(itemsList.location)}" //todo текст в стрингу и от ворнинга избавиться
-            price.text = "Цена: ${itemsList.price}" //todo текст в стрингу и от ворнинга избавиться
-            reminder.setOnClickListener {
-                //todo тут чето с воркменежером подмутить
+            MainViewModel.Category.SeaCreature -> {
+                val itemsList = seaCreaturesList[position]
+                val pictureLink = itemsList.iconUri
+                with(holder) {
+                    val monthList = itemsList.monthArray
+                    for (i in monthList) {
+                        if (isAllYear(monthList)) months.text = "Круглый год"
+                        else months.text = prepareMonths(monthList)
+                    }
+                    val timeList = itemsList.timeArray
+                    for (i in timeList) {
+                        if (isAllDay(timeList)) time.text = "В любое время"
+                        else time.text = prepareTime(timeList)
+                    }
+                    name.text =
+                            "Название: ${
+                                itemsList.name.replaceFirstChar {
+                                    it.uppercase()
+                                }
+                            }" //todo текст в стрингу и от ворнинга избавиться
+                    price.text = "Цена: ${itemsList.price}" //todo текст в стрингу и от ворнинга избавиться
+                    reminder.setOnClickListener {
+                        //todo тут чето с воркменежером подмутить
+                    }
+                    check.setOnClickListener {
+                        createNewDisposableAndSubscribe(itemsList.id, position)
+                        Snackbar.make(
+                                itemView,
+                                R.string.entry_deleted,
+                                5000
+                        ).setAction(
+                                "Отмена"
+                        ) { timeCountDisposable.dispose() }.show()
+                    }
+                    rarity.gone()
+                    location.gone()
+                }
+                load(pictureLink, holder.icon)
             }
-            check.setOnClickListener {
-                createNewDisposableAndSubscribe(itemsList.id, position)
-                Snackbar.make(
-                        itemView,
-                        R.string.entry_deleted,
-                        5000
-                ).setAction(
-                        "Отмена"
-                ) { timeCountDisposable.dispose() }.show()
+            MainViewModel.Category.Fossil -> {
+                val itemsList = fossilList[position]
+                with(holder) {
+                    name.text =
+                            "Название: ${
+                                itemsList.name.replaceFirstChar {
+                                    it.uppercase()
+                                }
+                            }" //todo текст в стрингу и от ворнинга избавиться
+                    price.text = "Цена: ${itemsList.price}" //todo текст в стрингу и от ворнинга избавиться
+                    reminder.setOnClickListener {
+                        //todo тут чето с воркменежером подмутить
+                    }
+                    check.setOnClickListener {
+                        createNewDisposableAndSubscribe(itemsList.id, position)
+                        Snackbar.make(
+                                itemView,
+                                R.string.entry_deleted,
+                                5000
+                        ).setAction(
+                                "Отмена"
+                        ) { timeCountDisposable.dispose() }.show()
+                    }
+                    icon.gone()
+                    months.gone()
+                    time.gone()
+                    rarity.gone()
+                    location.gone()
+                    reminder.gone()
+                }
             }
         }
-        load(pictureLink, holder.icon)
+
     }
 
     private fun createNewDisposableAndSubscribe(itemId: Long, position: Int) {
