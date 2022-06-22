@@ -42,22 +42,22 @@ class HubFragment : Fragment() {
         }
 
         fun openFishScreen(view: View) {
-            model.category.value = MainViewModel.Category.fish
+            model.category = MainViewModel.Category.Fish
             navigate(R.id.listFragment)
         }
 
         fun openBugScreen(view: View) {
-            model.category.value = MainViewModel.Category.bug
+            model.category = MainViewModel.Category.Bug
             navigate(R.id.listFragment)
         }
 
         fun openSeaCreatureScreen(view: View) {
-            model.category.value = MainViewModel.Category.seaCreature
+            model.category = MainViewModel.Category.SeaCreature
             navigate(R.id.listFragment)
         }
 
         fun openFossilScreen(view: View) {
-            model.category.value = MainViewModel.Category.fossil
+            model.category = MainViewModel.Category.Fossil
             navigate(R.id.listFragment)
         }
     }

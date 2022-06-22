@@ -20,6 +20,9 @@ interface SeaCreatureDao {
     @Query("SELECT * FROM seacreature WHERE userId = 0")
     fun getPrimaryBase(): List<SeaCreature>
 
-    @Query("DELETE FROM seacreature WHERE id = :id")
-    fun deleteById(id: Long)
+    @Query("SELECT * FROM seacreature WHERE userId = :id")
+    fun getUserBase(id: Long): List<SeaCreature>
+
+    @Query("DELETE FROM seacreature WHERE userId = :userId AND id = :id")
+    fun deleteFromUserById(userId: Long, id: Long)
 }

@@ -2,26 +2,28 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_card"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardCornerRadius="4dp"
-    >
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:background="@color/teal_200"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/item_checkbox"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/item_got_it"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="@string/catched"
             android:textColorHint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_name"
@@ -31,19 +33,16 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Рыба"
-            />
+            tools:text="Рыба" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/item_icon"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_margin="16dp"
-            app:layout_constraintEnd_toStartOf="@id/item_checkbox"
-            app:layout_constraintStart_toEndOf="@id/item_name"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_fish"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_name"
+            tools:src="@mipmap/ic_fish" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_months"
@@ -52,9 +51,8 @@
             android:layout_margin="16dp"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/item_checkbox"
-            tools:text="Ноябрь\nдекабрь"
-            />
+            app:layout_constraintTop_toBottomOf="@id/item_icon"
+            tools:text="Ноябрь\nдекабрь" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_time"
@@ -62,11 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toStartOf="@id/item_rarity"
-            app:layout_constraintStart_toEndOf="@id/item_months"
-            app:layout_constraintTop_toBottomOf="@id/item_checkbox"
-            tools:text="17:00-21:00"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_months"
+            tools:text="17:00-21:00" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_rarity"
@@ -74,11 +70,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/item_time"
-            app:layout_constraintTop_toBottomOf="@id/item_checkbox"
-            tools:text="Обычная"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_time"
+            tools:text="Обычная" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_location"
@@ -87,21 +81,19 @@
             android:layout_margin="16dp"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/item_months"
-            tools:text="Река"
-            />
+            app:layout_constraintTop_toBottomOf="@id/item_rarity"
+            tools:text="Река" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:paddingBottom="16dp"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toStartOf="@id/item_reminder"
-            app:layout_constraintStart_toEndOf="@id/item_location"
-            app:layout_constraintTop_toBottomOf="@id/item_months"
-            tools:text="Цена: 3500"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_location"
+            tools:text="Цена: 3500" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/item_reminder"
@@ -111,7 +103,6 @@
             android:text="@string/remind"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/item_months"
-            />
+            app:layout_constraintTop_toBottomOf="@id/item_got_it" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

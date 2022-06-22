@@ -20,6 +20,9 @@ interface BugDao {
     @Query("SELECT * FROM bug WHERE userId = 0")
     fun getPrimaryBase(): List<Bug>
 
-    @Query("DELETE FROM bug WHERE id = :id")
-    fun deleteById(id: Long)
+    @Query("SELECT * FROM bug WHERE userId = :id")
+    fun getUserBase(id: Long): List<Bug>
+
+    @Query("DELETE FROM bug WHERE userId = :userId AND id = :id")
+    fun deleteFromUserById(userId: Long, id: Long)
 }

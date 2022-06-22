@@ -20,6 +20,9 @@ interface FishDao {
     @Query("SELECT * FROM fish WHERE userId = 0")
     fun getPrimaryBase(): List<Fish>
 
-    @Query("DELETE FROM fish WHERE id = :id")
-    fun deleteById(id: Long)
+    @Query("SELECT * FROM fish WHERE userId = :id")
+    fun getUserBase(id: Long): List<Fish>
+
+    @Query("DELETE FROM fish WHERE userId = :userId AND id = :id")
+    fun deleteFromUserById(userId: Long, id: Long)
 }
